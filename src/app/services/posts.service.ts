@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {delay, Observable, of} from "rxjs";
-import {Post} from "./store/post.model";
+import {Post} from "../models/post.model";
 
 @Injectable({providedIn:'root'})
 export class PostsService {

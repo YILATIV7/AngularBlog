@@ -1,6 +1,6 @@
-import {AppState} from "./app.state";
+import {AppState} from "../models/app.state";
 import {createSelector} from "@ngrx/store";
-import {PostListState} from "./post-list.state";
+import {PostListState} from "../models/post-list.state";
 
 export const selectFeature = (state: AppState) => state.postList;
 
@@ -16,5 +16,5 @@ export const isErrorSelector = createSelector(
 
 export const postsSelector = createSelector(
   selectFeature,
-  (state: PostListState) => state.posts
+  (state: PostListState) => state.posts ? state.posts.slice(0, state.showedPostsCount) : []
 );

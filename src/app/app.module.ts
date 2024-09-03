@@ -9,14 +9,19 @@ import { EffectsModule } from '@ngrx/effects';
 import {PostsEffects} from "./store/posts.effects";
 import {HttpClientModule} from "@angular/common/http";
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import {PostListComponent} from "./post-list/post-list.component";
+import {PostListComponent} from "./components/post-list/post-list.component";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {ToastrModule} from "ngx-toastr";
+import {InfiniteScrollModule} from "ngx-infinite-scroll";
+import {provideRouter} from "@angular/router";
+import {appRoutes} from "./app.routes";
+import {CommentsComponent} from "./components/comments/comments.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    PostListComponent
+    PostListComponent,
+    CommentsComponent
   ],
   imports: [
     BrowserModule,
@@ -27,12 +32,13 @@ import {ToastrModule} from "ngx-toastr";
     }),
     EffectsModule.forRoot([PostsEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-    BrowserAnimationsModule, // required animations module
+    BrowserAnimationsModule,
     ToastrModule.forRoot({
       maxOpened: 1
     }),
+    InfiniteScrollModule
   ],
-  providers: [],
+  providers: [provideRouter(appRoutes)],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

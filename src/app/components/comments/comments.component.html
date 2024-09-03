@@ -1,0 +1,14 @@
+<div class="comments">
+  <h2>Comments fop post #{{postId$ | async}}</h2>
+
+  <div id="comments-list">
+    <div
+      class="comment"
+      *ngFor="let comment of comments$ | async"
+    >
+      <h3>{{comment.name}}</h3>
+      <div class="email">{{comment.email}}</div>
+      <p>{{comment.body}}</p>
+    </div>
+  </div>
+</div>
