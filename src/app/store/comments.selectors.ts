@@ -1,6 +1,6 @@
 import {AppState} from "../models/app.state";
 import {createSelector} from "@ngrx/store";
-import {CommentsState} from "../models/comments.state";
+import {adapter, CommentsState} from "./comments.reducers";
 
 export const selectFeature = (state: AppState) => state.commentList;
 
@@ -16,7 +16,7 @@ export const isListLoadingErrorSelector = createSelector(
 
 export const commentsSelector = createSelector(
   selectFeature,
-  (state: CommentsState) => state.comments ? state.comments : []
+  adapter.getSelectors().selectAll
 );
 
 export const isCommentUploadingSelector = createSelector(

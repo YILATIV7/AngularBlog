@@ -1,5 +1,4 @@
 import {createReducer, on} from "@ngrx/store";
-import {CommentsState} from "../models/comments.state";
 import {
   actionCommentsLoading,
   actionCommentsLoadingFailed,
@@ -8,22 +7,44 @@ import {
   actionCommentUploadingFailed,
   actionCommentUploadingSuccess
 } from "./comments.actions";
+import {Comment} from "../models/comment.model";
+import {createEntityAdapter, EntityAdapter, EntityState} from "@ngrx/entity";
 
-export const initialState: CommentsState = {
+export interface CommentsState extends EntityState<Comment> {
+  isListLoading: boolean,
+  isListLoadingError: boolean,
+  isCommentUploading: boolean,
+  isCommentUploadingError: boolean,
+}
+
+export const adapter: EntityAdapter<Comment> = createEntityAdapter<Comment>();
+
+export const initialState: CommentsState = adapter.getInitialState({
   isListLoading: false,
   isListLoadingError: false,
-  comments: [],
   isCommentUploading: false,
   isCommentUploadingError: false,
-};
+});
 
 export const commentsReducers = createReducer(
   initialState,
-  on(actionCommentsLoading, () => ({...initialState, isListLoading: true})),
-  on(actionCommentsLoadingSuccess, (state, {comments}) => ({...state, comments: comments, isListLoading: false})),
-  on(actionCommentsLoadingFailed, state => ({...state, isListLoading: false, isListLoadingError: true})),
+  on(actionCommentsLoading, () => {
+    return {...initialState, isListLoading: true}
+  }),
+  on(actionCommentsLoadingSuccess, (state, {comments}) => {
+    return {...adapter.addMany(comments, state), isListLoading: false}
+  }),
+  on(actionCommentsLoadingFailed, state => {
+    return {...state, isListLoading: false, isListLoadingError: true}
+  }),
 
-  on(actionCommentUploading, (state) => ({...state, isCommentUploading: true, isCommentUploadingError: false})),
-  on(actionCommentUploadingSuccess, (state, {comment}) => ({...state, comments: [...state.comments, comment], isCommentUploading: false})),
-  on(actionCommentUploadingFailed, (state) => ({...state, isCommentUploading: false, isCommentUploadingError: true})),
+  on(actionCommentUploading, (state) => {
+    return {...state, isCommentUploading: true, isCommentUploadingError: false}
+  }),
+  on(actionCommentUploadingSuccess, (state, {comment}) => {
+    return {...adapter.addOne(comment, state), isCommentUploading: false}
+  }),
+  on(actionCommentUploadingFailed, (state) => {
+    return {...state, isCommentUploading: false, isCommentUploadingError: true}
+  }),
 );
