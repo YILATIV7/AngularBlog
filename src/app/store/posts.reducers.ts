@@ -16,7 +16,7 @@ export const initialState: PostListState = {
 
 export const postsReducers = createReducer(
   initialState,
-  on(actionPostsLoading, state => ({...state, isLoading: true, isError: false})),
+  on(actionPostsLoading, () => ({...initialState, isLoading: true})),
   on(actionPostsLoadingSuccess, (state, {posts}) => ({...state, posts: posts, isLoading: false})),
   on(actionPostsLoadingFailed, state => ({...state, isLoading: false, isError: true})),
 
