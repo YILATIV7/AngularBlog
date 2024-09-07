@@ -2,6 +2,10 @@
 
 <span *ngIf="isLoading$ | async" class="loader"></span>
 
+<div *ngIf="isError$ | async" class="reload-button-block">
+  <button class="reload-button" (click)="loadPosts()">Reload</button>
+</div>
+
 <div
   infiniteScroll
   [infiniteScrollDistance]="2"

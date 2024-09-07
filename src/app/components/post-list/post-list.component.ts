@@ -4,9 +4,9 @@ import {postsSelector, isLoadingSelector, isErrorSelector} from "../../store/pos
 import {select, Store} from "@ngrx/store";
 import {AppState} from "../../models/app.state";
 import {actionPostsLoading, actionPostsScrolled} from "../../store/posts.actions";
-import {Observable, take} from "rxjs";
+import {Observable} from "rxjs";
 import {ToastrService} from "ngx-toastr";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 
 @Component({
   selector: "post-list",
@@ -18,27 +18,29 @@ export class PostListComponent implements OnInit {
   isLoading$: Observable<boolean>;
   isError$: Observable<boolean>;
 
-  constructor(protected store: Store<AppState>, private toastr: ToastrService, private route: ActivatedRoute, private router: Router) {
+  constructor(protected store: Store<AppState>, private toastr: ToastrService, private router: Router) {
     this.posts$ = this.store.pipe(select(postsSelector));
     this.isLoading$ = this.store.pipe(select(isLoadingSelector));
     this.isError$ = this.store.pipe(select(isErrorSelector));
 
     this.isError$.subscribe(value => {
-      if (value) this.toastr
-        .error(
-          'Click on this message to reload',
-          'Error when loading posts', {
-            timeOut: 0,
-            extendedTimeOut: 0
-          })
-        .onTap
-        .pipe(take(1))
-        .subscribe(() => this.store.dispatch(actionPostsLoading()));
+      if (value) {
+        this.toastr
+          .error(
+            'Error when loading posts',
+            'Error'
+          )
+      }
     });
   }
 
-  ngOnInit() {
+  loadPosts() {
+    this.toastr.clear();
     this.store.dispatch(actionPostsLoading());
+  }
+
+  ngOnInit() {
+    this.loadPosts();
   }
 
   onScroll() {

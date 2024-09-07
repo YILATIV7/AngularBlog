@@ -16,6 +16,9 @@ import {InfiniteScrollModule} from "ngx-infinite-scroll";
 import {provideRouter} from "@angular/router";
 import {appRoutes} from "./app.routes";
 import {CommentsComponent} from "./components/comments/comments.component";
+import {commentsReducers} from "./store/comments.reducers";
+import {CommentsEffects} from "./store/comments.effects";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -23,21 +26,23 @@ import {CommentsComponent} from "./components/comments/comments.component";
     PostListComponent,
     CommentsComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    StoreModule.forRoot({
-      postList: postsReducers
-    }),
-    EffectsModule.forRoot([PostsEffects]),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-    BrowserAnimationsModule,
-    ToastrModule.forRoot({
-      maxOpened: 1
-    }),
-    InfiniteScrollModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        StoreModule.forRoot({
+            postList: postsReducers,
+            commentList: commentsReducers,
+        }),
+        EffectsModule.forRoot([PostsEffects, CommentsEffects]),
+        StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !isDevMode()}),
+        BrowserAnimationsModule,
+        ToastrModule.forRoot({
+            maxOpened: 1
+        }),
+        InfiniteScrollModule,
+        FormsModule
+    ],
   providers: [provideRouter(appRoutes)],
   bootstrap: [AppComponent]
 })
