@@ -1,9 +1,9 @@
 import {Component, OnInit} from "@angular/core";
-import {Post} from "../../models/post.model";
-import {postsSelector, isLoadingSelector, isErrorSelector} from "../../store/posts.selectors";
+import {Post} from "../post.model";
+import {postsSelector, isLoadingSelector} from "../store/posts.selectors";
 import {select, Store} from "@ngrx/store";
-import {AppState} from "../../models/app.state";
-import {actionPostsLoading, actionPostsScrolled} from "../../store/posts.actions";
+import {AppState} from "../../app.state";
+import * as PostActions from "../store/posts.actions";
 import {Observable} from "rxjs";
 import {ToastrService} from "ngx-toastr";
 import {Router} from "@angular/router";
@@ -16,27 +16,15 @@ import {Router} from "@angular/router";
 export class PostListComponent implements OnInit {
   posts$: Observable<Post[]>;
   isLoading$: Observable<boolean>;
-  isError$: Observable<boolean>;
 
   constructor(protected store: Store<AppState>, private toastr: ToastrService, private router: Router) {
     this.posts$ = this.store.pipe(select(postsSelector));
     this.isLoading$ = this.store.pipe(select(isLoadingSelector));
-    this.isError$ = this.store.pipe(select(isErrorSelector));
-
-    this.isError$.subscribe(value => {
-      if (value) {
-        this.toastr
-          .error(
-            'Error when loading posts',
-            'Error'
-          )
-      }
-    });
   }
 
   loadPosts() {
     this.toastr.clear();
-    this.store.dispatch(actionPostsLoading());
+    this.store.dispatch(PostActions.actionLoadPosts());
   }
 
   ngOnInit() {
@@ -44,7 +32,7 @@ export class PostListComponent implements OnInit {
   }
 
   onScroll() {
-    this.store.dispatch(actionPostsScrolled());
+    this.store.dispatch(PostActions.actionPostsScrolled());
   }
 
   openComments(postId: number) {

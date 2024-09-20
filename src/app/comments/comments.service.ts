@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Comment} from "../models/comment.model";
+import {Comment} from "./comment.model";
 import {delay, of} from "rxjs";
 
 @Injectable({providedIn: 'root'})

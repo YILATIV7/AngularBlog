@@ -2,9 +2,6 @@
   <h2>Comments fop post #{{postId}}</h2>
 
   <span *ngIf="isListLoading$ | async" class="loader"></span>
-  <div *ngIf="isListLoadingError$ | async" class="reload-button-block">
-    <button class="reload-button" (click)="loadComments()">Reload</button>
-  </div>
 
   <div id="comments-list">
     <div
@@ -18,12 +15,12 @@
   </div>
 </div>
 
-<div *ngIf="!(isListLoading$ | async) && !(isListLoadingError$ | async)" class="comment-form">
+<div *ngIf="isCommentFormShowing" class="comment-form">
   <h3>Add new comment</h3>
   <input type="text" id="name" placeholder="Your name" required [(ngModel)]="nameProperty">
   <input type="email" id="email" placeholder="Your email" required [(ngModel)]="emailProperty">
   <textarea id="body" rows="4" placeholder="Your comment" required [(ngModel)]="bodyProperty"></textarea>
-  <button (click)="addComment()">Upload comment</button>
+  <button (click)="addComment()" [disabled]="isCommentUploading$ | async">Upload comment</button>
 </div>
 
 <div *ngIf="isCommentUploading$ | async" class="comment-uploading">

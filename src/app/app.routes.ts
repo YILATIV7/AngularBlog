@@ -1,6 +1,6 @@
 import {Routes} from "@angular/router";
-import {PostListComponent} from "./components/post-list/post-list.component";
-import {CommentsComponent} from "./components/comments/comments.component";
+import {PostListComponent} from "./post-list/component/post-list.component";
+import {CommentsComponent} from "./comments/component/comments.component";
 
 export const appRoutes: Routes = [
   {path: 'posts', title: 'Posts', component: PostListComponent},
